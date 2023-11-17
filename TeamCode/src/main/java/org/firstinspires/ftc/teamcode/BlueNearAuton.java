@@ -37,6 +37,7 @@ public class BlueNearAuton extends LinearOpMode {
 
         initHardware();
 
+        // These positions are almost entirely wrong and need to be reversed. They are the Red positions:
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .addTemporalMarker(() -> {
 
