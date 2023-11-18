@@ -44,10 +44,12 @@ public class BlueNearAuton extends LinearOpMode {
                 })
                 .back(20)
                 .turn(Math.toRadians(45))
-                .addTemporalMarker(() -> boxWrist.setPosition(0.71))
+                //changed 11/17/23
+                .addTemporalMarker(() -> boxWrist.setPosition(1))
                 .waitSeconds(2)
                 .addTemporalMarker(() ->{
-                    latch.setPosition(0.71);
+                    //changed 11/17/23
+                    latch.setPosition(1);
                 })
                 .turn(Math.toRadians(-135))
                 .back(32)
@@ -55,10 +57,12 @@ public class BlueNearAuton extends LinearOpMode {
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .back(40)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.71))
+                //changed 11/17/23
+                .addTemporalMarker(() -> boxWrist.setPosition(1))
                 .waitSeconds(2)
                 .addTemporalMarker(() ->{
-                    latch.setPosition(0.71);
+                    //changed 11/17/23
+                    latch.setPosition(1);
                 })
                 .turn(Math.toRadians(-90))
                 .back(35)
