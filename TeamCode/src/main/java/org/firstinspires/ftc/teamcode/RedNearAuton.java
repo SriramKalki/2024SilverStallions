@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.MIDDLE;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -14,7 +15,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
-
+@Config
 @Autonomous(name="Red Near Auton")
 public class RedNearAuton extends LinearOpMode {
     private NewRedPropProcessor.Location location = MIDDLE;
@@ -28,6 +29,7 @@ public class RedNearAuton extends LinearOpMode {
     private CRServo intake, belt; // belt is orange pass through thing
     SampleMecanumDrive drive;
 
+    public static double wristVal = 0.1;
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
@@ -37,42 +39,62 @@ public class RedNearAuton extends LinearOpMode {
 
         initHardware();
 
-        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .addTemporalMarker(() -> {
+        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                .back(30)
+                .turn(Math.toRadians(-90))
 
-                })
-                .back(20)
-                .turn(Math.toRadians(45))
-                //changed 11/17/23
-                .addTemporalMarker(() -> boxWrist.setPosition(1))
+                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
+                .addTemporalMarker(() -> belt.setPower(-1))
+                .waitSeconds(3)
+                .addTemporalMarker(() -> intakeWrist.setPosition(0))
+                .addTemporalMarker(() -> belt.setPower(0))
                 .waitSeconds(2)
-                .addTemporalMarker(() ->{
-                    //changed 11/17/23
-                    latch.setPosition(1);
-                })
-                .turn(Math.toRadians(-135))
-                .back(32)
-                .strafeLeft(72)
+                .back(30)
+                .addTemporalMarker(() -> slide.setPower(0.75))
+                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .waitSeconds(1)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(40)
-                //changed 11/17/23
-                .addTemporalMarker(() -> boxWrist.setPosition(1))
+                //.turn(Math.toRadians(-1))
+                .back(27)
+                //.turn(Math.toRadians(-90))
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
+                .addTemporalMarker(() -> belt.setPower(-1))
                 .waitSeconds(2)
-                .addTemporalMarker(() ->{
-                    //changed 11/17/23
-                    latch.setPosition(1);
-                })
-                .turn(Math.toRadians(-90))
-                .back(35)
-                .strafeLeft(72)
+                .addTemporalMarker(() -> intakeWrist.setPosition(0))
+                .addTemporalMarker(() -> belt.setPower(0))
+                .waitSeconds(2)
+                .back(10)
+                .turn(Math.toRadians(90))
+                .forward(30)
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> slide.setPower(0.75))
+                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .waitSeconds(1)
+                .forward(10)
                 .build();
 
-        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .strafeRight(10)
-                .back(20)
+        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                //.turn(Math.toRadians(-1))
+                .strafeLeft(4)
+                .back(30)
+                .turn(Math.toRadians(90))
 
+                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
+                .addTemporalMarker(() -> belt.setPower(-1))
+                .waitSeconds(2)
+                .addTemporalMarker(() -> intakeWrist.setPosition(0))
+                .waitSeconds(2)
+                .back(5)
+                .strafeLeft(10)
+                .forward(30)
+                .waitSeconds(1)
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> slide.setPower(0.75))
+                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .waitSeconds(1)
                 .build();
 
         while(!isStarted()){

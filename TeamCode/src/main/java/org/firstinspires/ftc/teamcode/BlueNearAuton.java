@@ -27,6 +27,7 @@ public class BlueNearAuton extends LinearOpMode {
     private Servo latch, boxWrist, intakeWrist;
     private CRServo intake, belt; // belt is orange pass through thing
     SampleMecanumDrive drive;
+    public static double wristVal = 0.1;
 
     @Override
     public void runOpMode(){
@@ -38,47 +39,71 @@ public class BlueNearAuton extends LinearOpMode {
         initHardware();
 
         // These positions are almost entirely wrong and need to be reversed. They are the Red positions:
-        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .addTemporalMarker(() -> {
+        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                //.turn(Math.toRadians(-1))
+                .back(30)
+                .turn(Math.toRadians(90))
 
-                })
-                .back(20)
-                .turn(Math.toRadians(45))
-                //changed 11/17/23
-                .addTemporalMarker(() -> boxWrist.setPosition(1))
+                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
+                .addTemporalMarker(() -> belt.setPower(-1))
+                .waitSeconds(3)
+                .addTemporalMarker(() -> intakeWrist.setPosition(0))
+                .addTemporalMarker(() -> belt.setPower(0))
                 .waitSeconds(2)
-                .addTemporalMarker(() ->{
-                    //changed 11/17/23
-                    latch.setPosition(1);
-                })
-                .turn(Math.toRadians(-135))
-                .back(32)
+                .back(30)
+                .addTemporalMarker(() -> slide.setPower(0.75))
+                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .waitSeconds(2)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(40)
-                //changed 11/17/23
-                .addTemporalMarker(() -> boxWrist.setPosition(1))
+                //.turn(Math.toRadians(-1))
+                .back(27)
+                //.turn(Math.toRadians(-90))
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
+                .addTemporalMarker(() -> belt.setPower(-1))
                 .waitSeconds(2)
-                .addTemporalMarker(() ->{
-                    //changed 11/17/23
-                    latch.setPosition(1);
-                })
+                .addTemporalMarker(() -> intakeWrist.setPosition(0))
+                .addTemporalMarker(() -> belt.setPower(0))
+                .waitSeconds(2)
+                .back(10)
                 .turn(Math.toRadians(-90))
-                .back(35)
+                .back(30)
+                //.turn(Math.toRadians(180))
+                .addTemporalMarker(() -> slide.setPower(0.75))
+                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .waitSeconds(2)
+                .back(10)
                 .build();
 
-        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .strafeRight(10)
-                .back(20)
+        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                //.turn(Math.toRadians(-1))
+                .strafeRight(4)
+                .back(30)
+                .turn(Math.toRadians(-90))
 
+                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
+                .addTemporalMarker(() -> belt.setPower(-1))
+                .waitSeconds(2)
+                .addTemporalMarker(() -> intakeWrist.setPosition(0))
+                .waitSeconds(2)
+                .forward(45)
+                .waitSeconds(1)
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> slide.setPower(0.75))
+                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .waitSeconds(2)
                 .build();
+
+
 
         while(!isStarted()){
             location = bluePropProcessor.getLocation();
             telemetry.update();
         }
         waitForStart();
+        //drive.followTrajectorySequence(leftPurple);
         switch(location){
             case LEFT:
                 drive.followTrajectorySequence(leftPurple);

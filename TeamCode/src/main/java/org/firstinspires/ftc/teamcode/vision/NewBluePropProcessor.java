@@ -58,12 +58,12 @@ public class NewBluePropProcessor implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 80;
-    public static int lowCr = 130;
-    public static int lowCb = 110;
-    public static int highY = 110;
-    public static int highCr = 200;
-    public static int highCb = 200;
+    public static int lowY = 30;
+    public static int lowCr = 50;
+    public static int lowCb = 50;
+    public static int highY = 70;
+    public static int highCr = 120;
+    public static int highCb = 250;
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
     public Scalar upper = new Scalar(highY,highCr,highCb);
 

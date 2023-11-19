@@ -146,7 +146,7 @@ public class NewRedPropProcessor implements VisionProcessor {
 
         Imgproc.rectangle(maskedInputMat, hat, new Scalar(255,255,255));
 
-        int centerX = (hat.x + hat.width)/2;
+        int centerX = hat.x + hat.width;
 
         if(centerX <= 640/3){
             location = Location.LEFT;
