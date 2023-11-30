@@ -53,7 +53,8 @@ public class RedNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(22)
                 .turn(Math.toRadians(180))
-                //.addTemporalMarker(() -> slide.setPower(slidePower))
+                .strafeLeft(5)
+                //drop off yellow
                 .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(1)
@@ -73,7 +74,7 @@ public class RedNearAuton extends LinearOpMode {
                 .forward(12)
                 .turn(Math.toRadians(-90))
                 .back(33)
-                //.addTemporalMarker(() -> slide.setPower(slidePower))
+                //drop off yellow
                 .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(1)
@@ -95,7 +96,8 @@ public class RedNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(46)
                 .turn(Math.toRadians(180))
-                //.addTemporalMarker(() -> slide.setPower(slidePower))
+                .strafeRight(5)
+                //drop off yellow
                 .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(1)
