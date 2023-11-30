@@ -26,11 +26,13 @@ public class RedNearAuton extends LinearOpMode {
     private DcMotor slide;
     private DcMotor climb;
     private DcMotor plane;
-    private Servo latch, boxWrist, intakeWrist;
+    private Servo latch, boxWrist, intakeWrist, pixel;
     private CRServo intake, belt; // belt is orange pass through thing
     SampleMecanumDrive drive;
 
-    public static double wristVal = 0.1;
+    public static double wristVal = 0.65;
+    public static int targetVal = 5;
+    public static double slidePower = 0.5;
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
@@ -41,117 +43,64 @@ public class RedNearAuton extends LinearOpMode {
         initHardware();
 
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                /*on the intake side
-                .back(30)
-                .turn(90)
-                //DROP PURPLE
-                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
-                .addTemporalMarker(() -> belt.setPower(-1))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> intakeWrist.setPosition(0))
-                .addTemporalMarker(() -> belt.setPower(0))
-                .waitSeconds(2)
-                //DROP PURPLE
-                .strafeRight(15)
-                .turn(180)
-                .back(30)
-                .addTemporalMarker(() -> slide.setPower(0.75))
-                .addTemporalMarker(() -> latch.setPosition(0.71))
-                .waitSeconds(1)
-                .strafeLeft(10)
-                .build();
-                */
-
                 //on outake side
                 .back(30)
-                .turn(-90)
-                //.addTemporalMarker(() -> <SERVO>.setPower(1))
+                .turn(Math.toRadians(90))
+                .forward(13)
+                .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                //.addTemporalMarker(() -> <SERVO>.setPower(0))
-                .strafeLeft(10)
-                .back(30)
-                .addTemporalMarker(() -> slide.setPower(0.75))
-                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .addTemporalMarker(() -> slide.setPower(0))
+                .forward(22)
+                .turn(Math.toRadians(180))
+                //.addTemporalMarker(() -> slide.setPower(slidePower))
+                .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
+                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
+                .waitSeconds(1)
                 .addTemporalMarker(() -> latch.setPosition(0))
-                .strafeLeft(10)
+                .waitSeconds(1)
                 .build();
 
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                /*on intake side
-                .back(27)
-                .turn(Math.toRadians(180))
-                //DROP PURPLE
-                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
-                .addTemporalMarker(() -> belt.setPower(-1))
-                .waitSeconds(2)
-                .addTemporalMarker(() -> intakeWrist.setPosition(0))
-                .addTemporalMarker(() -> belt.setPower(0))
-                .waitSeconds(2)
-                //DROP PURPLE
-                .back(15)
-                .turn(Math.toRadians(90))
-                .back(30)
-
-                .addTemporalMarker(() -> slide.setPower(0.75))
-                .addTemporalMarker(() -> latch.setPosition(0.71))
-                .waitSeconds(1)
-                .strafeLeft(10)
-                .build();*/
 
                 //on the outtake side
-                .back(30)
-                //.addTemporalMarker(() -> <SERVO>.setPower(1))
+                .back(32.5)
+                .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                //.addTemporalMarker(() -> <SERVO>.setPower(0))
-                .forward(5)
-                .turn(-90)
-                .back(30)
-                .addTemporalMarker(() -> slide.setPower(0.75))
-                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .addTemporalMarker(() -> slide.setPower(0))
+                .forward(12)
+                .turn(Math.toRadians(-90))
+                .back(33)
+                //.addTemporalMarker(() -> slide.setPower(slidePower))
+                .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
+                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
+                .waitSeconds(1)
                 .addTemporalMarker(() -> latch.setPosition(0))
-                .strafeLeft(10)
+                .waitSeconds(1)
                 .build();
 
 
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                /*on the intake side
-                .back(30)
-                .turn(Math.toRadians(-90))
-                //DROP PURPLE
-                .addTemporalMarker(() -> intakeWrist.setPosition(wristVal))
-                .addTemporalMarker(() -> belt.setPower(-1))
-                .waitSeconds(2)
-                .addTemporalMarker(() -> intakeWrist.setPosition(0))
-                .waitSeconds(2)
-                //DROP PURPLE
-                .back(30)
-                .addTemporalMarker(() -> slide.setPower(0.75))
-                .addTemporalMarker(() -> latch.setPosition(0.71))
-                .waitSeconds(1)
-                .strafeLeft(10)
-                .build();*/
 
                 //on the outtake side
-                .back(30)
-                .turn(90)
-                //.addTemporalMarker(() -> <SERVO>.setPower(1))
+                .back(25)
+                .turn(Math.toRadians(90))
+                .back(8)
+                .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                //.addTemporalMarker(() -> <SERVO>.setPower(0))
-                .strafeLeft(10)
-                .turn(180)
-                .back(30)
-                .addTemporalMarker(() -> slide.setPower(0.75))
-                .addTemporalMarker(() -> latch.setPosition(0.71))
+                .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .addTemporalMarker(() -> slide.setPower(0))
+                .forward(46)
+                .turn(Math.toRadians(180))
+                //.addTemporalMarker(() -> slide.setPower(slidePower))
+                .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
+                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
+                .waitSeconds(1)
                 .addTemporalMarker(() -> latch.setPosition(0))
-                .strafeLeft(10)
+                .waitSeconds(1)
                 .build();
 
 
@@ -160,7 +109,8 @@ public class RedNearAuton extends LinearOpMode {
             telemetry.update();
         }
         waitForStart();
-        switch(location){
+        drive.followTrajectorySequence(rightPurple);
+        /*switch(location){
             case LEFT:
                 drive.followTrajectorySequence(leftPurple);
                 break;
@@ -170,10 +120,11 @@ public class RedNearAuton extends LinearOpMode {
             case RIGHT:
                 drive.followTrajectorySequence(rightPurple);
                 break;
-        }
+        }*/
 
 
     }
+
 
 
 
@@ -186,9 +137,11 @@ public class RedNearAuton extends LinearOpMode {
         intakeWrist = hardwareMap.get(Servo.class, "intakeWrist");
         intake = hardwareMap.get(CRServo.class, "intake");
         belt = hardwareMap.get(CRServo.class, "belt");
+        pixel = hardwareMap.get(Servo.class, "pixel");
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         latch.setPosition(1);
+        boxWrist.setPosition(0);
     }
 
 
