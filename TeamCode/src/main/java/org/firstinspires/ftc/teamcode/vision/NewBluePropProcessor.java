@@ -138,7 +138,8 @@ public class NewBluePropProcessor implements VisionProcessor {
         {
 
             Rect rect = Imgproc.boundingRect(countor);
-            if (rect.area() > hat.area()) {
+            int centerY = rect.y + rect.height;
+            if (rect.area() > hat.area() && centerY >= 480/2) {
                 hat = rect;
             }
 
@@ -147,11 +148,13 @@ public class NewBluePropProcessor implements VisionProcessor {
         Imgproc.rectangle(maskedInputMat, hat, new Scalar(255,255,255));
 
         int centerX = hat.x + hat.width;
-
-        if(centerX <= 640/3){
+        int area = (int) hat.area();
+        telemetry.addData("Area: ", area);
+        telemetry.addData("CenterX: ", centerX);
+        if(centerX <= 250 && area >= 3000){
             location = Location.LEFT;
             telemetry.addData("Position:", " Left");
-        }else if(centerX <= 1280/3){
+        }else if(centerX <= 600 && area >= 2000){
             location = Location.MIDDLE;
             telemetry.addData("Position:", " Mid");
         }else{

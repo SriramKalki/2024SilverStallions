@@ -58,10 +58,10 @@ public class NewRedPropProcessor implements VisionProcessor {
      * min and max values here for now, meaning
      * that all pixels will be shown.
      */
-    public static int lowY = 80;
-    public static int lowCr = 130;
-    public static int lowCb = 110;
-    public static int highY = 110;
+    public static int lowY = 40;
+    public static int lowCr = 140;
+    public static int lowCb = 100;
+    public static int highY = 70;
     public static int highCr = 200;
     public static int highCb = 200;
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
@@ -138,7 +138,9 @@ public class NewRedPropProcessor implements VisionProcessor {
         {
 
             Rect rect = Imgproc.boundingRect(countor);
-            if (rect.area() > hat.area()) {
+
+            int centerY = rect.y + rect.height;
+            if (rect.area() > hat.area() && centerY >= 480/2 ) {
                 hat = rect;
             }
 
@@ -147,11 +149,13 @@ public class NewRedPropProcessor implements VisionProcessor {
         Imgproc.rectangle(maskedInputMat, hat, new Scalar(255,255,255));
 
         int centerX = hat.x + hat.width;
-
-        if(centerX <= 640/3){
+        int area = (int) hat.area();
+        telemetry.addData("Area: ", area);
+        telemetry.addData("CenterX: ", centerX);
+        if(centerX <= 230 && area >= 3000 ){ //bottom half
             location = Location.LEFT;
             telemetry.addData("Position:", " Left");
-        }else if(centerX <= 1280/3){
+        }else if(centerX <= 550 && area >= 2000){
             location = Location.MIDDLE;
             telemetry.addData("Position:", " Mid");
         }else{

@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import static org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor.Location.MIDDLE;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -27,13 +29,14 @@ public class BlueNearAuton extends LinearOpMode {
     private Servo latch, boxWrist, intakeWrist, pixel;
     private CRServo intake, belt; // belt is orange pass through thing
     SampleMecanumDrive drive;
-    public static double wristVal = 0.65;
-    public static int targetVal = 3000;
+    public static double wristVal = 0.7; //0.65
+    public static int targetVal = 2000;
     public static double slidePower = 0.5;
 
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
+        telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         bluePropProcessor = new NewBluePropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
                 hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
@@ -52,7 +55,12 @@ public class BlueNearAuton extends LinearOpMode {
                 .forward(46)
                 .turn(Math.toRadians(180))
                 //drop off yellow
-                .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(targetVal);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(2)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> latch.setPosition(0))
@@ -65,14 +73,19 @@ public class BlueNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .forward(12)
+                .forward(10)
                 .turn(Math.toRadians(90))
-                .back(33)
-                .strafeRight(5)
+                .back(36)
                 //drop off yellow
-                .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(targetVal);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+                })
+                .waitSeconds(2)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(1)
+                .waitSeconds(2)
                 .addTemporalMarker(() -> latch.setPosition(0))
                 .waitSeconds(1)
                 .build();
@@ -89,8 +102,12 @@ public class BlueNearAuton extends LinearOpMode {
                 .turn(Math.toRadians(180))
                 .strafeRight(10)
                 //drop off yellow
-                .addTemporalMarker(() -> slide.setTargetPosition(targetVal))
-                .waitSeconds(1)
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(targetVal);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(2)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> latch.setPosition(0))
@@ -103,10 +120,8 @@ public class BlueNearAuton extends LinearOpMode {
             telemetry.update();
         }
         waitForStart();
-        drive.followTrajectorySequence(rightPurple);
         switch(location){
-
-            /*case LEFT:
+            case LEFT:
                 drive.followTrajectorySequence(leftPurple);
                 break;
             case MIDDLE:
@@ -114,7 +129,7 @@ public class BlueNearAuton extends LinearOpMode {
                 break;
             case RIGHT:
                 drive.followTrajectorySequence(rightPurple);
-                break;*/
+                break;
         }
 
 
