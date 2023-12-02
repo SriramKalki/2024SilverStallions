@@ -1,29 +1,26 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.MIDDLE;
+import static org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor.Location.MIDDLE;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
+import org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
-@Config
-@Autonomous(name="Red Near Auton")
-public class RedNearAuton extends LinearOpMode {
-    private NewRedPropProcessor.Location location = MIDDLE;
-    private NewRedPropProcessor redPropProcessor;
+
+@Autonomous(name="Blue Far Auton")
+public class BlueFarAuton extends LinearOpMode {
+    private NewBluePropProcessor.Location location = MIDDLE;
+    private NewBluePropProcessor bluePropProcessor;
     private VisionPortal visionPortal;
 
     private DcMotor slide;
@@ -32,111 +29,58 @@ public class RedNearAuton extends LinearOpMode {
     private Servo latch, boxWrist, intakeWrist, pixel;
     private CRServo intake, belt; // belt is orange pass through thing
     SampleMecanumDrive drive;
-
-    public static double wristVal = 0.65;
+    public static double wristVal = 0.7; //0.65
     public static int targetVal = 1000;
     public static double slidePower = 0.5;
+
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        redPropProcessor = new NewRedPropProcessor(telemetry);
+        bluePropProcessor = new NewBluePropProcessor(telemetry);
         visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
+                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
 
         initHardware();
 
+        // These positions are almost entirely wrong and need to be reversed. They are the Red positions:
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                //on outake side
-                .back(30)
-                .turn(Math.toRadians(90))
-                .forward(13)
+                .back(25)
+                .turn(Math.toRadians(-90))
+                .back(8)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
-                .waitSeconds(1)
-                .forward(22)
-                .turn(Math.toRadians(180))
-                .strafeLeft(5)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
+                .forward(8)
                 .waitSeconds(3)
                 .build();
 
-
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-
-                //on the outtake side
                 .back(32.5)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
-                .waitSeconds(1)
-                .forward(12)
-                .turn(Math.toRadians(-90))
-                .strafeRight(6)
-                .back(37)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
+                .forward(15)
                 .waitSeconds(3)
                 .build();
 
-
-
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-
-                //on the outtake side
-                .back(25)
-                .turn(Math.toRadians(90))
-                .back(8) //change
+                .back(30)
+                .turn(Math.toRadians(-90))
+                .forward(14)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
-                .waitSeconds(1)
-                .forward(12)
-                .turn(Math.toRadians(180))
-                .back(30)
-                .strafeRight(12)
-                .back(1)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
                 .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .back(6)
                 .build();
 
 
         while(!isStarted()){
-            location = redPropProcessor.getLocation();
+            location = bluePropProcessor.getLocation();
             telemetry.update();
         }
         waitForStart();
-
         switch(location){
             case LEFT:
                 drive.followTrajectorySequence(leftPurple);
@@ -154,7 +98,6 @@ public class RedNearAuton extends LinearOpMode {
 
 
 
-
     public void initHardware(){
         slide = hardwareMap.get(DcMotor.class, "slide");
         climb = hardwareMap.get(DcMotor.class, "climb");
@@ -165,7 +108,6 @@ public class RedNearAuton extends LinearOpMode {
         intake = hardwareMap.get(CRServo.class, "intake");
         belt = hardwareMap.get(CRServo.class, "belt");
         pixel = hardwareMap.get(Servo.class, "pixel");
-
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         latch.setPosition(0);

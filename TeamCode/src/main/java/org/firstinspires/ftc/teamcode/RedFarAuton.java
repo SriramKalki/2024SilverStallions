@@ -20,8 +20,8 @@ import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuild
 import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 @Config
-@Autonomous(name="Red Near Auton")
-public class RedNearAuton extends LinearOpMode {
+@Autonomous(name="Red Far Auton")
+public class RedFarAuton extends LinearOpMode {
     private NewRedPropProcessor.Location location = MIDDLE;
     private NewRedPropProcessor redPropProcessor;
     private VisionPortal visionPortal;
@@ -55,21 +55,7 @@ public class RedNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .forward(22)
-                .turn(Math.toRadians(180))
-                .strafeLeft(5)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .back(8)
                 .build();
 
 
@@ -81,22 +67,7 @@ public class RedNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .forward(12)
-                .turn(Math.toRadians(-90))
-                .strafeRight(6)
-                .back(37)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .forward(16)
                 .build();
 
 
@@ -111,23 +82,7 @@ public class RedNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .forward(12)
-                .turn(Math.toRadians(180))
-                .back(30)
-                .strafeRight(12)
-                .back(1)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .forward(8)
                 .build();
 
 

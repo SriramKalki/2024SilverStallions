@@ -30,7 +30,7 @@ public class BlueNearAuton extends LinearOpMode {
     private CRServo intake, belt; // belt is orange pass through thing
     SampleMecanumDrive drive;
     public static double wristVal = 0.7; //0.65
-    public static int targetVal = 2000;
+    public static int targetVal = 1000;
     public static double slidePower = 0.5;
 
     @Override
@@ -52,19 +52,23 @@ public class BlueNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .forward(46)
+                .forward(16)
                 .turn(Math.toRadians(180))
+                .back(28)
+                .strafeRight(5)
+
                 //drop off yellow
                 .addTemporalMarker(() -> {
                     slide.setTargetPosition(targetVal);
-                    slide.setPower(0.5);
+                    slide.setPower(1);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
                 })
-                .waitSeconds(2)
+                .waitSeconds(3)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(1)
-                .addTemporalMarker(() -> latch.setPosition(0))
-                .waitSeconds(1)
+                .waitSeconds(3)
+                .addTemporalMarker(() -> latch.setPosition(1))
+                .waitSeconds(3)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
@@ -75,19 +79,19 @@ public class BlueNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .forward(10)
                 .turn(Math.toRadians(90))
-                .back(36)
+                .back(35)
                 //drop off yellow
                 .addTemporalMarker(() -> {
                     slide.setTargetPosition(targetVal);
-                    slide.setPower(0.5);
+                    slide.setPower(1);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 })
-                .waitSeconds(2)
+                .waitSeconds(3)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(2)
-                .addTemporalMarker(() -> latch.setPosition(0))
-                .waitSeconds(1)
+                .waitSeconds(3)
+                .addTemporalMarker(() -> latch.setPosition(1))
+                .waitSeconds(3)
                 .build();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
@@ -98,20 +102,21 @@ public class BlueNearAuton extends LinearOpMode {
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
                 .waitSeconds(1)
-                .forward(22)
+                .forward(23)
                 .turn(Math.toRadians(180))
                 .strafeRight(10)
                 //drop off yellow
                 .addTemporalMarker(() -> {
                     slide.setTargetPosition(targetVal);
-                    slide.setPower(0.5);
+                    slide.setPower(1);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
                 })
-                .waitSeconds(2)
+                .waitSeconds(3)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(1)
-                .addTemporalMarker(() -> latch.setPosition(0))
-                .waitSeconds(1)
+                .waitSeconds(3)
+                .addTemporalMarker(() -> latch.setPosition(1))
+                .waitSeconds(3)
                 .build();
 
 
@@ -149,7 +154,7 @@ public class BlueNearAuton extends LinearOpMode {
         pixel = hardwareMap.get(Servo.class, "pixel");
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        latch.setPosition(1);
+        latch.setPosition(0);
         boxWrist.setPosition(0);
     }
 
