@@ -17,8 +17,15 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequenceBuilder;
+import org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor;
 import org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+import org.firstinspires.ftc.vision.apriltag.AprilTagPoseFtc;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
+
+import java.util.List;
+
 @Config
 @Autonomous(name="Red Near Auton")
 public class RedNearAuton extends LinearOpMode {
@@ -41,8 +48,9 @@ public class RedNearAuton extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         redPropProcessor = new NewRedPropProcessor(telemetry);
+        AprilTagProcessor aprilTagProcessor  = AprilTagProcessor.easyCreateWithDefaults();
         visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor);
+                hardwareMap.get(WebcamName.class, "Webcam 1"), redPropProcessor, aprilTagProcessor);
 
         initHardware();
 
@@ -59,7 +67,7 @@ public class RedNearAuton extends LinearOpMode {
                 .turn(Math.toRadians(180))
                 .strafeLeft(5)
                 //drop off yellow
-                .addTemporalMarker(() -> {
+                /*.addTemporalMarker(() -> {
                     slide.setTargetPosition(targetVal);
                     slide.setPower(1);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -69,7 +77,7 @@ public class RedNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(3)
                 .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .waitSeconds(3)*/
                 .build();
 
 
@@ -86,7 +94,7 @@ public class RedNearAuton extends LinearOpMode {
                 .strafeRight(6)
                 .back(37)
                 //drop off yellow
-                .addTemporalMarker(() -> {
+                /*.addTemporalMarker(() -> {
                     slide.setTargetPosition(targetVal);
                     slide.setPower(1);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -96,7 +104,7 @@ public class RedNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(3)
                 .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .waitSeconds(3)*/
                 .build();
 
 
@@ -117,7 +125,7 @@ public class RedNearAuton extends LinearOpMode {
                 .strafeRight(12)
                 .back(1)
                 //drop off yellow
-                .addTemporalMarker(() -> {
+                /*.addTemporalMarker(() -> {
                     slide.setTargetPosition(targetVal);
                     slide.setPower(1);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -127,12 +135,13 @@ public class RedNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(3)
                 .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .waitSeconds(3)*/
                 .build();
 
 
         while(!isStarted()){
             location = redPropProcessor.getLocation();
+            telemetry.addLine("location: " + location);
             telemetry.update();
         }
         waitForStart();
@@ -148,7 +157,19 @@ public class RedNearAuton extends LinearOpMode {
                 drive.followTrajectorySequence(rightPurple);
                 break;
         }
+        List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
+        for(AprilTagDetection detection:detections) {
+            int id = detection.id;
+            AprilTagPoseFtc tagPose = detection.ftcPose;
+            telemetry.addLine("Detected tag ID: " + id);
+            //range - distance to tag
+            telemetry.addLine("Distance to tag: " + tagPose.range);
+            //bearing - angle to tag
+            telemetry.addLine("Bearing to tag: " + tagPose.bearing);
+            //yaw - angle of tag
+            telemetry.addLine("Angle of tag: " + tagPose.yaw);
 
+        }
 
     }
 

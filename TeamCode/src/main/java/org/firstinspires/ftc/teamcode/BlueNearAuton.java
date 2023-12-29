@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
+import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 @Autonomous(name="Blue Near Auton")
 public class BlueNearAuton extends LinearOpMode {
@@ -38,8 +39,9 @@ public class BlueNearAuton extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         bluePropProcessor = new NewBluePropProcessor(telemetry);
+        AprilTagProcessor aprilTagProcessor  = AprilTagProcessor.easyCreateWithDefaults();
         visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
+                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor,aprilTagProcessor);
 
         initHardware();
 
@@ -64,6 +66,7 @@ public class BlueNearAuton extends LinearOpMode {
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
                 })
+
                 .waitSeconds(3)
                 .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
                 .waitSeconds(3)
@@ -136,6 +139,7 @@ public class BlueNearAuton extends LinearOpMode {
                 drive.followTrajectorySequence(rightPurple);
                 break;
         }
+
 
 
     }
