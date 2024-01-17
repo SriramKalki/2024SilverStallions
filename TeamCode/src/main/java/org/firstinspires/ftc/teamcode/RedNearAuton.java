@@ -66,20 +66,7 @@ public class RedNearAuton extends LinearOpMode {
                 .forward(22)
                 .turn(Math.toRadians(180))
                 .strafeLeft(5)
-                //drop off yellow
-                /*.addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)*/
                 .build();
-
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
 
@@ -93,21 +80,7 @@ public class RedNearAuton extends LinearOpMode {
                 .turn(Math.toRadians(-90))
                 .strafeRight(6)
                 .back(37)
-                //drop off yellow
-                /*.addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)*/
                 .build();
-
-
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
 
@@ -124,18 +97,6 @@ public class RedNearAuton extends LinearOpMode {
                 .back(30)
                 .strafeRight(12)
                 .back(1)
-                //drop off yellow
-                /*.addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)*/
                 .build();
 
 

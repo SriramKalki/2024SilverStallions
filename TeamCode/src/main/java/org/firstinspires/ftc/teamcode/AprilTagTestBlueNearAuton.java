@@ -52,49 +52,96 @@ public class AprilTagTestBlueNearAuton extends LinearOpMode {
 
         initHardware();
 
-        TrajectorySequence idOne = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .back(25)
+                .turn(Math.toRadians(-90))
+                .back(8)
+                .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+                .forward(16)
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(75);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(1)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .waitSeconds(1)
+                .back(28)
+                .strafeLeft(5)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(2)
+                .forward(5)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
+                .strafeLeft(20)
                 .build();
-        TrajectorySequence idTwo = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(25)
+
+        TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                .back(32.5)
+                .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+                .forward(15)
+                .turn(Math.toRadians(90))
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(500);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(1)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .waitSeconds(1)
+                .back(35)
+                .strafeLeft(8)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(2)
+                .forward(3)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
+                .strafeLeft(20)
                 .build();
-        TrajectorySequence idThree = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(25)
+
+        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                .back(30)
+                .turn(Math.toRadians(-90))
+                .forward(13)
+                .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+                .forward(10)
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(250);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(1)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .waitSeconds(1)
+                .back(9)
+                .strafeRight(13)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(2)
+                .forward(5)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
+                .strafeLeft(20)
+                .back(5)
                 .build();
+
 
         while(!isStarted()){
             location = bluePropProcessor.getLocation();
-            telemetry.addLine("it is about to start");
             telemetry.update();
         }
 
         waitForStart();
-        while(opModeIsActive()) {
-            List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
-            for(AprilTagDetection detection:detections) {
-                int id = detection.id;
-                idNum = id;
-                AprilTagPoseFtc tagPose = detection.ftcPose;
-                telemetry.addLine("Detected tag ID: " + id);
-                //range - distance to tag
-                telemetry.addLine("Distance to tag: " + tagPose.range);
-                //bearing - angle to tag
-                telemetry.addLine("Bearing to tag: " + tagPose.bearing);
-                //yaw - angle of tag
-                telemetry.addLine("Angle of tag: " + tagPose.yaw);
-
-            }
-            telemetry.update();
-        }
-        switch(idNum){
-            case 1:
-                drive.followTrajectorySequence(idOne);
+        switch(location){
+            case LEFT:
+                drive.followTrajectorySequence(leftPurple);
                 break;
-            case 2:
-                drive.followTrajectorySequence(idTwo);
+            case MIDDLE:
+                drive.followTrajectorySequence(middlePurple);
                 break;
-            case 3:
-                drive.followTrajectorySequence(idThree);
+            case RIGHT:
+                drive.followTrajectorySequence(rightPurple);
                 break;
         }
 

@@ -39,117 +39,138 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
     SampleMecanumDrive drive;
     public static double wristVal = 0.7; //0.65
     public static int targetVal = 1000;
-    public static double slidePower = 0.8;
+    public static double slidePower = 0.3;
     public static double distanceToTag = 2;
     public static int idNum = 0;
-    public static int currentId = 0;
-
+    public static int gameId = 0;
+    public static double strafeDistance = 0;
 
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        //redPropProcessor = new NewRedPropProcessor(telemetry);
+        redPropProcessor = new NewRedPropProcessor(telemetry);
         AprilTagProcessor aprilTagProcessor  = AprilTagProcessor.easyCreateWithDefaults();
         visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTagProcessor);
+                hardwareMap.get(WebcamName.class, "Webcam 1"), aprilTagProcessor, redPropProcessor);
 
         initHardware();
-
-        TrajectorySequence moveBack = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(26)
-                .build();
-        TrajectorySequence right = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .strafeRight(1)
-                .build();
-        TrajectorySequence left = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .strafeLeft(1)
-                .build();
-        TrajectorySequence dropYellow = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                //drop off yellow
+        TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                .back(31)
+                .turn(Math.toRadians(90))
+                .forward(13)
+                .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+                .forward(10)
+                .turn(Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(slidePower);
+                    slide.setTargetPosition(75);
+                    slide.setPower(0.5);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
                 })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .waitSeconds(0.3)
+                .strafeLeft(10)
+                .back(12)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(2)
+                .forward(5)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
+                .strafeRight(20)
                 .build();
-        /*TrajectorySequence idFour = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(25)
+
+        TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                .back(32.5)
+                .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+                .forward(12)
+                .turn(Math.toRadians(-90))
+                .strafeRight(3)
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(75);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .waitSeconds(1)
+                .back(36)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(2)
+                .forward(5)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
+                .waitSeconds(0.5)
+                .strafeRight(20)
                 .build();
-        TrajectorySequence idFive = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+
+        TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .back(25)
+                .turn(Math.toRadians(90))
+                .back(8) //change
+                .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+                .forward(12)
+                .turn(Math.toRadians(180))
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(75);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .waitSeconds(0.3)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .waitSeconds(1)
+                .back(30)
+                .strafeRight(12)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(2)
+                .forward(5)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
+                .strafeRight(20)
                 .build();
-        TrajectorySequence idSix = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(25)
-                .build();*/
+
 
         while(!isStarted()){
-            //location = redPropProcessor.getLocation();
-            telemetry.addLine("it is about to start");
+            location = redPropProcessor.getLocation();
+            telemetry.addLine("location" + location);
             telemetry.update();
         }
-        //LINE BELOW SHOULDNT BE THERE PERMANENTLY
-        location = LEFT;
-        if(location == LEFT) {currentId = 4;}
-        if(location == MIDDLE) {currentId = 5;}
-        if(location == RIGHT) {currentId = 6;}
 
         waitForStart();
-        drive.followTrajectorySequence(moveBack);
-        while(opModeIsActive()) {
-            List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
-            for(AprilTagDetection detection:detections) {
-                int id = detection.id;
-                AprilTagPoseFtc tagPose = detection.ftcPose;
-                telemetry.addLine("LOCATION: " + location);
-                telemetry.addLine("Current ID: " + currentId);
-                telemetry.addLine("Detected tag ID: " + id);
-                //range - distance to tag
-                telemetry.addLine("Distance to tag: " + tagPose.range);
-                //bearing - angle to tag
-                telemetry.addLine("Bearing to tag: " + tagPose.bearing);
-                //yaw - angle of tag
-                telemetry.addLine("Angle of tag: " + tagPose.yaw);
-                telemetry.update();
+        switch(location){
+            case LEFT:
+                gameId = 4;
+                drive.followTrajectorySequence(leftPurple);
+                break;
+            case MIDDLE:
+                gameId = 5;
+                drive.followTrajectorySequence(middlePurple);
+                break;
+            case RIGHT:
+                gameId = 6;
+                drive.followTrajectorySequence(rightPurple);
+                break;
+        }
 
-                while(id != currentId) {
-                    if(id > currentId) {
-                        telemetry.addLine("TOO LEFT");
-                        drive.followTrajectorySequence(left);
-                    }
-                    if(id < currentId) {
-                        telemetry.addLine("TOO RIGHT");
-                        drive.followTrajectorySequence(right);
-                    }
-                    id = detection.id;
+        /*while(opModeIsActive()) {
+            List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
+            for(AprilTagDetection detection : detections) {
+                int id = detection.id;
+
+                if(id == gameId) {  // This AprilTag id is the one we're looking for!
+                    AprilTagPoseFtc tagPose = detection.ftcPose; // gets the values for the location and orientation of april tag
+                    strafeDistance = tagPose.range * Math.sin(Math.toRadians(tagPose.bearing)); //range = hypotenuse (distance from tag), bearing = angle of robot to tag
+                    //drive.updatePoseEstimate(new Pose2d(,5,Math.toRadians(5)));
+                    telemetry.addLine("Id:" + id);
+                    telemetry.addLine("Strafe Distance:" + strafeDistance);
+                    telemetry.update();
+                    break;
                 }
+                
             }
             telemetry.update();
-        }
-        //drop off yellow
-        //drive.followTrajectorySequence(dropYellow);
-        /*switch(idNum){
-            case 1:
-                drive.followTrajectorySequence(idFour);
-                break;
-            case 2:
-                drive.followTrajectorySequence(idFive);
-                break;
-            case 3:
-                drive.followTrajectorySequence(idSix);
-                break;
         }*/
-
-
     }
-
-
 
     public void initHardware(){
         slide = hardwareMap.get(DcMotor.class, "slide");
@@ -162,8 +183,6 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
         belt = hardwareMap.get(CRServo.class, "belt");
         pixel = hardwareMap.get(Servo.class, "pixel");
         WebcamName webcam1 = hardwareMap.get(WebcamName.class, "Webcam 1");
-
-
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         slide.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         latch.setPosition(0);

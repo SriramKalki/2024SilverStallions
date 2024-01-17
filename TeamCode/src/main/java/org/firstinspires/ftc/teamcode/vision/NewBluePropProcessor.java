@@ -154,14 +154,13 @@ public class NewBluePropProcessor implements VisionProcessor {
         if(centerX <= 250 && area >= 3000){
             location = Location.LEFT;
             telemetry.addData("Position:", " Left");
-        }else if(centerX <= 600 && area >= 2000){
+        }else if(centerX <= 670 && area >= 2000){
             location = Location.MIDDLE;
             telemetry.addData("Position:", " Mid");
         }else{
             location = Location.RIGHT;
             telemetry.addData("Position:", " Right");
         }
-        telemetry.update();
 
         maskedInputMat.copyTo(frame);
         return null;
