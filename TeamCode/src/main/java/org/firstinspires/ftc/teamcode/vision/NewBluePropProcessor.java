@@ -151,10 +151,10 @@ public class NewBluePropProcessor implements VisionProcessor {
         int area = (int) hat.area();
         telemetry.addData("Area: ", area);
         telemetry.addData("CenterX: ", centerX);
-        if(centerX <= 250 && area >= 3000){
+        if(centerX <= 280 && area >= 3000){
             location = Location.LEFT;
             telemetry.addData("Position:", " Left");
-        }else if(centerX <= 670 && area >= 2000){
+        }else if(centerX <= 650 && area >= 3000){
             location = Location.MIDDLE;
             telemetry.addData("Position:", " Mid");
         }else{

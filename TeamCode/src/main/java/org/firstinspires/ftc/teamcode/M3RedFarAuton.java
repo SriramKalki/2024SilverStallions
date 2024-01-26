@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
-import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.LEFT;
 import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.MIDDLE;
-import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.RIGHT;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
@@ -24,8 +22,8 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 
-@Autonomous(name="!!Meet 3 Red Near Auton")
-public class AprilTagTestRedNearAuton extends LinearOpMode {
+@Autonomous(name="Meet 3 Red Far Auton")
+public class M3RedFarAuton extends LinearOpMode {
     private NewRedPropProcessor.Location location = MIDDLE;
     private NewRedPropProcessor redPropProcessor;
     private VisionPortal visionPortal;
@@ -40,11 +38,12 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
     public static double wristVal = 0.7; //0.65
     public static int targetVal = 1000;
     public static double slidePower = 0.3;
+    public static double distanceToTag = 2;
     public static int idNum = 0;
     public static int gameId = 0;
     public static double strafeDistance = 0;
     public static double distanceToBackdrop = 0;
-    public static int purplePixel = 25;
+
     @Override
     public void runOpMode(){
         drive = new SampleMecanumDrive(hardwareMap);
@@ -60,13 +59,10 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
                 .turn(Math.toRadians(90))
                 .forward(13)
                 .addTemporalMarker(() -> pixel.setPosition(1))
-                .waitSeconds(1)
-                .strafeRight(1)
-                .strafeLeft(1)
-                .forward(10)
+                .forward(50)
                 .turn(Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    slide.setTargetPosition(purplePixel);
+                    slide.setTargetPosition(75);
                     slide.setPower(0.5);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 })
@@ -74,42 +70,23 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> boxWrist.setPosition(0.73))
                 .waitSeconds(0.3)
                 .strafeLeft(10)
-                .back(12)
-                .addTemporalMarker(() -> latch.setPosition(0.75))
-                .waitSeconds(2)
-                .forward(5)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
-                //.strafeRight(32)
-                //strafeLeft(14)
-                //.back(10)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .back(32.5)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                .strafeRight(1)
-                .strafeLeft(1)
-                .forward(12)
+                .forward(5)
                 .turn(Math.toRadians(-90))
-                .strafeRight(3)
+                .back(50)
                 .addTemporalMarker(() -> {
-                    slide.setTargetPosition(purplePixel);
+                    slide.setTargetPosition(75);
                     slide.setPower(0.5);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 })
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> boxWrist.setPosition(0.73))
                 .waitSeconds(1)
-                .back(36)
-                .addTemporalMarker(() -> latch.setPosition(0.75))
-                .waitSeconds(2)
-                .forward(5)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.37))
-                .waitSeconds(0.5)
-                //.strafeRight(28)
-                //strafeLeft(20)
-                //.back(10)
                 .build();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
@@ -118,29 +95,27 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
                 .back(8) //change
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                .strafeRight(1)
-                .strafeLeft(1)
-                .forward(12)
+                .forward(50)
                 .turn(Math.toRadians(180))
                 .addTemporalMarker(() -> {
-                    slide.setTargetPosition(purplePixel);
+                    slide.setTargetPosition(75);
                     slide.setPower(0.5);
                     slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 })
                 .waitSeconds(0.3)
                 .addTemporalMarker(() -> boxWrist.setPosition(0.73))
                 .waitSeconds(1)
-                .back(30)
-                .strafeRight(12)
+                .build();
+
+        TrajectorySequence outtake = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .addTemporalMarker(() -> latch.setPosition(0.75))
                 .waitSeconds(2)
                 .forward(5)
                 .addTemporalMarker(() -> boxWrist.setPosition(0.37))
-                //.strafeRight(20)
-                //strafeLeft(20)
-                //.back(10)
+                .waitSeconds(0.5)
+                .strafeRight(20)
+                .back(10)
                 .build();
-
 
         while(!isStarted()){
             location = redPropProcessor.getLocation();
@@ -164,26 +139,42 @@ public class AprilTagTestRedNearAuton extends LinearOpMode {
                 break;
         }
 
-        /*while(opModeIsActive()) {
+        while(opModeIsActive()) {
             List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
             for(AprilTagDetection detection : detections) {
                 int id = detection.id;
 
                 if(id == gameId) {  // This AprilTag id is the one we're looking for!
                     AprilTagPoseFtc tagPose = detection.ftcPose; // gets the values for the location and orientation of april tag
-                    strafeDistance = tagPose.range * Math.sin(Math.toRadians(tagPose.bearing)); //range = hypotenuse (distance from tag), bearing = angle of robot to tag
-                    //ADD method to strafe this distance!!!
-                    distanceToBackdrop = tagPose.range;//distance from tag
-                    //ADD method to move to close to backdrop to outtake!
+                    strafeDistance = tagPose.range * Math.sin(Math.toRadians(tagPose.bearing));
+                    /*TrajectorySequence strafeL = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                            .strafeLeft(strafeDistance)
+                            .build();
+                    TrajectorySequence strafeR = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                            .strafeRight(strafeDistance)
+                            .build();
+                    if(strafeDistance < 0) {
+                        strafeDistance = -1 * strafeDistance;
+                        drive.followTrajectorySequence(strafeL);
+                    }
+                    else{
+                        drive.followTrajectorySequence(strafeR);
+                    }*/
+                    distanceToBackdrop = tagPose.range;
+                    TrajectorySequence driveToBackdrop = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+                            .back(distanceToBackdrop)
+                            .build();
+                    drive.followTrajectorySequence(driveToBackdrop);
                     telemetry.addLine("Id:" + id);
                     telemetry.addLine("Strafe Distance:" + strafeDistance);
                     telemetry.update();
                     break;
                 }
-
+                
             }
             telemetry.update();
-        }*/
+        }
+        drive.followTrajectorySequence(outtake);
     }
 
     public void initHardware(){

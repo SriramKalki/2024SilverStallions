@@ -61,8 +61,8 @@ public class NewRedPropProcessor implements VisionProcessor {
     public static int lowY = 40;
     public static int lowCr = 140;
     public static int lowCb = 100;
-    public static int highY = 70;
-    public static int highCr = 200;
+    public static int highY = 100;
+    public static int highCr = 250;
     public static int highCb = 200;
     public Scalar lower = new Scalar(lowY,lowCr,lowCb);
     public Scalar upper = new Scalar(highY,highCr,highCb);
