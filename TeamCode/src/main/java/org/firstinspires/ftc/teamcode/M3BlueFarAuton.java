@@ -53,6 +53,8 @@ public class M3BlueFarAuton extends LinearOpMode {
                 .turn(Math.toRadians(-90))
                 .back(8)
                 .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(3)
+                .forward(10)
                 /*.waitSeconds(1)
                 .forward(50)
                 .turn(Math.toRadians(180))
@@ -103,10 +105,13 @@ public class M3BlueFarAuton extends LinearOpMode {
                 .build();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(30)
-                .turn(Math.toRadians(-90))
-                .forward(13)
+                .back(25)
+                .turn(Math.toRadians(90))
+                .back(8) //change
                 .addTemporalMarker(() -> pixel.setPosition(1))
+                .waitSeconds(1)
+
+                .forward(10)
                 /*.forward(50)
                 .turn(Math.toRadians(180))
                 .addTemporalMarker(() -> {

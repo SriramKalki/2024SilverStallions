@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import static org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor.Location.MIDDLE;
 
@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -16,10 +17,10 @@ import org.firstinspires.ftc.teamcode.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.vision.NewBluePropProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
-@Autonomous(name="Blue Near Auton")
-public class BlueNearAuton extends LinearOpMode {
+@Autonomous(name="Blue Far Auton")
+@Disabled
+public class BlueFarAuton extends LinearOpMode {
     private NewBluePropProcessor.Location location = MIDDLE;
     private NewBluePropProcessor bluePropProcessor;
     private VisionPortal visionPortal;
@@ -39,9 +40,8 @@ public class BlueNearAuton extends LinearOpMode {
         drive = new SampleMecanumDrive(hardwareMap);
         telemetry = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
         bluePropProcessor = new NewBluePropProcessor(telemetry);
-        AprilTagProcessor aprilTagProcessor  = AprilTagProcessor.easyCreateWithDefaults();
         visionPortal = VisionPortal.easyCreateWithDefaults(
-                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor,aprilTagProcessor);
+                hardwareMap.get(WebcamName.class, "Webcam 1"), bluePropProcessor);
 
         initHardware();
 
@@ -53,24 +53,7 @@ public class BlueNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
-                .waitSeconds(1)
-                .forward(16)
-                .turn(Math.toRadians(180))
-                .back(28)
-                .strafeRight(5)
-
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
+                .forward(8)
                 .waitSeconds(3)
                 .build();
 
@@ -79,21 +62,7 @@ public class BlueNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
-                .waitSeconds(1)
-                .forward(10)
-                .turn(Math.toRadians(90))
-                .back(35)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
-                .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
+                .forward(15)
                 .waitSeconds(3)
                 .build();
 
@@ -104,22 +73,8 @@ public class BlueNearAuton extends LinearOpMode {
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
                 .addTemporalMarker(() -> pixel.setPosition(0))
-                .waitSeconds(1)
-                .forward(23)
-                .turn(Math.toRadians(180))
-                .strafeRight(10)
-                //drop off yellow
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(targetVal);
-                    slide.setPower(1);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-                })
                 .waitSeconds(3)
-                .addTemporalMarker(() -> boxWrist.setPosition(wristVal))
-                .waitSeconds(3)
-                .addTemporalMarker(() -> latch.setPosition(1))
-                .waitSeconds(3)
+                .back(6)
                 .build();
 
 
@@ -139,7 +94,6 @@ public class BlueNearAuton extends LinearOpMode {
                 drive.followTrajectorySequence(rightPurple);
                 break;
         }
-
 
 
     }

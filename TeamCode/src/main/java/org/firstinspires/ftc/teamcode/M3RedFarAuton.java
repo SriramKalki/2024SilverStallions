@@ -55,38 +55,41 @@ public class M3RedFarAuton extends LinearOpMode {
 
         initHardware();
         TrajectorySequence rightPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(31)
-                .turn(Math.toRadians(90))
-                .forward(13)
+                .back(25)
+                .turn(Math.toRadians(-90))
+                .back(8)
                 .addTemporalMarker(() -> pixel.setPosition(1))
-                .forward(50)
-                .turn(Math.toRadians(180))
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(75);
-                    slide.setPower(0.5);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                })
-                .waitSeconds(0.3)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
-                .waitSeconds(0.3)
-                .strafeLeft(10)
+//                .forward(50)
+//                .turn(Math.toRadians(180))
+//                .addTemporalMarker(() -> {
+//                    slide.setTargetPosition(75);
+//                    slide.setPower(0.5);
+//                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                })
+//                .waitSeconds(0.3)
+//                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+//                .waitSeconds(0.3)
+//                .strafeLeft(10)
+                .waitSeconds(3)
+                .forward(10)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
                 .back(32.5)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                .forward(5)
-                .turn(Math.toRadians(-90))
-                .back(50)
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(75);
-                    slide.setPower(0.5);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                })
-                .waitSeconds(0.3)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+//                .forward(5)
+//                .turn(Math.toRadians(-90))
+//                .back(50)
+//                .addTemporalMarker(() -> {
+//                    slide.setTargetPosition(75);
+//                    slide.setPower(0.5);
+//                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                })
+//                .waitSeconds(0.3)
+//                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
                 .waitSeconds(1)
+                .forward(10)
                 .build();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
@@ -95,16 +98,17 @@ public class M3RedFarAuton extends LinearOpMode {
                 .back(8) //change
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-                .forward(50)
-                .turn(Math.toRadians(180))
-                .addTemporalMarker(() -> {
-                    slide.setTargetPosition(75);
-                    slide.setPower(0.5);
-                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                })
-                .waitSeconds(0.3)
-                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+//                .forward(50)
+//                .turn(Math.toRadians(180))
+//                .addTemporalMarker(() -> {
+//                    slide.setTargetPosition(75);
+//                    slide.setPower(0.5);
+//                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                })
+//                .waitSeconds(0.3)
+//                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
                 .waitSeconds(1)
+                .forward(10)
                 .build();
 
         TrajectorySequence outtake = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
@@ -138,43 +142,43 @@ public class M3RedFarAuton extends LinearOpMode {
                 drive.followTrajectorySequence(rightPurple);
                 break;
         }
-
-        while(opModeIsActive()) {
-            List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
-            for(AprilTagDetection detection : detections) {
-                int id = detection.id;
-
-                if(id == gameId) {  // This AprilTag id is the one we're looking for!
-                    AprilTagPoseFtc tagPose = detection.ftcPose; // gets the values for the location and orientation of april tag
-                    strafeDistance = tagPose.range * Math.sin(Math.toRadians(tagPose.bearing));
-                    /*TrajectorySequence strafeL = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                            .strafeLeft(strafeDistance)
-                            .build();
-                    TrajectorySequence strafeR = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                            .strafeRight(strafeDistance)
-                            .build();
-                    if(strafeDistance < 0) {
-                        strafeDistance = -1 * strafeDistance;
-                        drive.followTrajectorySequence(strafeL);
-                    }
-                    else{
-                        drive.followTrajectorySequence(strafeR);
-                    }*/
-                    distanceToBackdrop = tagPose.range;
-                    TrajectorySequence driveToBackdrop = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                            .back(distanceToBackdrop)
-                            .build();
-                    drive.followTrajectorySequence(driveToBackdrop);
-                    telemetry.addLine("Id:" + id);
-                    telemetry.addLine("Strafe Distance:" + strafeDistance);
-                    telemetry.update();
-                    break;
-                }
-                
-            }
-            telemetry.update();
-        }
-        drive.followTrajectorySequence(outtake);
+//
+//        while(opModeIsActive()) {
+//            List<AprilTagDetection> detections = aprilTagProcessor.getDetections();
+//            for(AprilTagDetection detection : detections) {
+//                int id = detection.id;
+//
+//                if(id == gameId) {  // This AprilTag id is the one we're looking for!
+//                    AprilTagPoseFtc tagPose = detection.ftcPose; // gets the values for the location and orientation of april tag
+//                    strafeDistance = tagPose.range * Math.sin(Math.toRadians(tagPose.bearing));
+//                    /*TrajectorySequence strafeL = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+//                            .strafeLeft(strafeDistance)
+//                            .build();
+//                    TrajectorySequence strafeR = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+//                            .strafeRight(strafeDistance)
+//                            .build();
+//                    if(strafeDistance < 0) {
+//                        strafeDistance = -1 * strafeDistance;
+//                        drive.followTrajectorySequence(strafeL);
+//                    }
+//                    else{
+//                        drive.followTrajectorySequence(strafeR);
+//                    }*/
+//                    distanceToBackdrop = tagPose.range;
+//                    TrajectorySequence driveToBackdrop = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
+//                            .back(distanceToBackdrop)
+//                            .build();
+//                    drive.followTrajectorySequence(driveToBackdrop);
+//                    telemetry.addLine("Id:" + id);
+//                    telemetry.addLine("Strafe Distance:" + strafeDistance);
+//                    telemetry.update();
+//                    break;
+//                }
+//
+//            }
+//            telemetry.update();
+//        }
+//        drive.followTrajectorySequence(outtake);
     }
 
     public void initHardware(){

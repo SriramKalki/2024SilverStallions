@@ -81,7 +81,7 @@ public class AprilTagTestBlueNearAuton extends LinearOpMode {
                 .forward(5)
                 .addTemporalMarker(() -> boxWrist.setPosition(0.37))
                 //.strafeLeft(20)
-                //strafeRight(20)
+                .strafeRight(20)
                 //.back(10)
                 .build();
 
@@ -108,7 +108,7 @@ public class AprilTagTestBlueNearAuton extends LinearOpMode {
                 .forward(5)
                 .addTemporalMarker(() -> boxWrist.setPosition(0.37))
                 //.strafeLeft(25)
-                //strafeRight(20)
+                .strafeRight(20)
                 //.back(10)
                 .build();
 
@@ -137,7 +137,7 @@ public class AprilTagTestBlueNearAuton extends LinearOpMode {
                 .forward(5)
                 .addTemporalMarker(() -> boxWrist.setPosition(0.37))
                 //.strafeLeft(27)
-                //strafeRight(13)
+                .strafeRight(13)
                 //.back(10)
                 .build();
 

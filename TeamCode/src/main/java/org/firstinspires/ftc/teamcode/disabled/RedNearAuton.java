@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.disabled;
 
 import static org.firstinspires.ftc.teamcode.vision.NewRedPropProcessor.Location.MIDDLE;
 
@@ -7,6 +7,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -27,6 +28,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.List;
 
 @Config
+@Disabled
 @Autonomous(name="Red Near Auton")
 public class RedNearAuton extends LinearOpMode {
     private NewRedPropProcessor.Location location = MIDDLE;
@@ -98,6 +100,7 @@ public class RedNearAuton extends LinearOpMode {
                 .strafeRight(12)
                 .back(1)
                 .build();
+
 
 
         while(!isStarted()){
