@@ -59,56 +59,73 @@ public class M3RedFarAuton extends LinearOpMode {
                 .turn(Math.toRadians(-90))
                 .back(8)
                 .addTemporalMarker(() -> pixel.setPosition(1))
-//                .forward(50)
-//                .turn(Math.toRadians(180))
-//                .addTemporalMarker(() -> {
-//                    slide.setTargetPosition(75);
-//                    slide.setPower(0.5);
-//                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                })
-//                .waitSeconds(0.3)
-//                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
-//                .waitSeconds(0.3)
-//                .strafeLeft(10)
+                .forward(8)
+                .strafeRight(25)
+                .back(75)
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(500);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .strafeLeft(35)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .back(10)
+                .waitSeconds(1)
+                .back(5)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
                 .waitSeconds(3)
-                .forward(10)
+//                .strafeLeft(10)
                 .build();
 
         TrajectorySequence middlePurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(32.5)
+                .back(55)
+                .forward(20)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-//                .forward(5)
-//                .turn(Math.toRadians(-90))
-//                .back(50)
-//                .addTemporalMarker(() -> {
-//                    slide.setTargetPosition(75);
-//                    slide.setPower(0.5);
-//                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                })
-//                .waitSeconds(0.3)
-//                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
-                .waitSeconds(1)
                 .forward(10)
+                .strafeRight(20)
+                .back(25)
+                .turn(Math.toRadians(-90))
+                .back(95)
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(500);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .strafeLeft(27)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .back(10)
+                .waitSeconds(1)
+                .back(5)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .waitSeconds(3)
+                .forward(5)
                 .build();
 
         TrajectorySequence leftPurple = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
-                .back(25)
-                .turn(Math.toRadians(90))
-                .back(8) //change
+                .back(28)
+                .strafeRight(10)
                 .addTemporalMarker(() -> pixel.setPosition(1))
                 .waitSeconds(1)
-//                .forward(50)
-//                .turn(Math.toRadians(180))
-//                .addTemporalMarker(() -> {
-//                    slide.setTargetPosition(75);
-//                    slide.setPower(0.5);
-//                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                })
-//                .waitSeconds(0.3)
-//                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
-                .waitSeconds(1)
                 .forward(10)
+                .strafeLeft(12)
+                .back(35)
+                .turn(Math.toRadians(-90))
+                .back(75)
+                .addTemporalMarker(() -> {
+                    slide.setTargetPosition(500);
+                    slide.setPower(0.5);
+                    slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                })
+                .strafeLeft(22)
+                .addTemporalMarker(() -> boxWrist.setPosition(0.73))
+                .back(10)
+                .waitSeconds(1)
+                .back(5)
+                .addTemporalMarker(() -> latch.setPosition(0.75))
+                .back(3)
+                .waitSeconds(3)
+                .forward(5)
                 .build();
 
         TrajectorySequence outtake = drive.trajectorySequenceBuilder(new Pose2d(0,0,Math.toRadians(0)))
