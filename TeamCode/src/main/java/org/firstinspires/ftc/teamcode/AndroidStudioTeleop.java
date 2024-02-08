@@ -13,6 +13,7 @@ import com.qualcomm.robotcore.util.Range;
 @TeleOp
 @Config
 public class AndroidStudioTeleop extends LinearOpMode {
+    //hi
 
     private DcMotor frontRightMotor = null;
     private DcMotor backRightMotor = null;
@@ -56,9 +57,6 @@ public class AndroidStudioTeleop extends LinearOpMode {
 
 
 
-
-
-
             telemetry.addData("Linear Slide Position: ", extensionMotor.getCurrentPosition());
             telemetry.addData("Left Pitch Position: ", leftPitchMotor.getCurrentPosition());
             telemetry.addData("Right Pitch Position: ", rightPitchMotor.getCurrentPosition());
@@ -84,7 +82,7 @@ public class AndroidStudioTeleop extends LinearOpMode {
         double frontRightPower = Range.clip((turn + drive) * speedMod + strafe, -1.0, 1.0);
         double backLeftPower = Range.clip((turn - drive) * speedMod + strafe, -1.0, 1.0);
         double backRightPower = Range.clip((turn + drive) * speedMod - strafe, -1.0, 1.0);
-
+        telemetry.addData("Front Left Motor Power: ", frontLeftPower);
         frontLeftMotor.setPower(frontLeftPower);
         backLeftMotor.setPower(backLeftPower);
         frontRightMotor.setPower(frontRightPower);
@@ -94,13 +92,7 @@ public class AndroidStudioTeleop extends LinearOpMode {
     public void moveExtension(){
 
         double extension = -gamepad2.left_stick_y;
-        if(!prevDpadDown && gamepad1.dpad_down){
-            pitchGoal += 30;
-        }else if(!prevDpadUp && gamepad1.dpad_up){
-            pitchGoal -= 30;
-        }
-
-        double output = pitchPid.calculate(rightPitchMotor.getCurrentPosition(),pitchGoal);
+        double output = -0.5 * gamepad2.right_stick_y;
         leftPitchMotor.setPower(output);
         rightPitchMotor.setPower(output);
 
@@ -109,24 +101,24 @@ public class AndroidStudioTeleop extends LinearOpMode {
 
     public void moveWrist(){
         //wrist control
-        if(gamepad2.dpad_right){
-            rightWristServo.setPosition(0.3);
-            leftWristServo.setPosition(0.7);
-        }else if(gamepad2.dpad_left){
-            rightWristServo.setPosition(0.85);
-            leftWristServo.setPosition(0.15);
+        if(gamepad2.dpad_up){
+            rightWristServo.setPosition(1-0.73);
+            leftWristServo.setPosition(0.73);
+        }else if(gamepad2.dpad_down){
+            rightWristServo.setPosition(1-0.9);
+            leftWristServo.setPosition(0.9);
         }
     }
     public void moveClaw(){
-        if(!prevLeft && gamepad1.left_bumper){
+        if(!prevLeft && gamepad2.left_bumper){
             leftClose = !leftClose;
-        }else if(!prevRight && gamepad1.right_bumper){
+        }else if(!prevRight && gamepad2.right_bumper){
             rightClose = !rightClose;
         }
         leftClawServo.setPosition(leftClose ? 1 : 0);
-        rightClawServo.setPosition(rightClose ? 1 : 0.4);
-        prevLeft = gamepad1.left_bumper;
-        prevRight = gamepad1.right_bumper;
+        rightClawServo.setPosition(rightClose ? 1 : 0.6);
+        prevLeft = gamepad2.left_bumper;
+        prevRight = gamepad2.right_bumper;
     }
 
     public void initialize(){

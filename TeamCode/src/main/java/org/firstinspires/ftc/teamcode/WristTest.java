@@ -17,8 +17,7 @@ public class WristTest extends LinearOpMode {
     private Servo leftClawServo = null;
     private Servo rightClawServo = null;
 
-    public static double left = 0;
-    public static double right = 0;
+    public static double x = 0;
 
     @Override
     public void runOpMode(){
@@ -30,8 +29,8 @@ public class WristTest extends LinearOpMode {
 
         waitForStart();
         while(opModeIsActive()){
-            leftWristServo.setPosition(left);
-            rightWristServo.setPosition(right);
+            leftWristServo.setPosition(x);
+            rightWristServo.setPosition(1-x);
         }
     }
 }
