@@ -28,8 +28,8 @@ public class AndroidStudioTeleop extends LinearOpMode {
     private Servo leftClawServo = null;
     private Servo rightClawServo = null;
 
-    PIDController pitchPid = new PIDController(0,0,0);
-    public static double kP=0.01,kI=0,kD=0;
+    PIDController pitchPid = new PIDController(0.005,0,0.0001);
+    public static double kP=0.005,kI=0,kD=0.0001;
     public static double kF=0;
 
     boolean prevLeft = false;
@@ -92,7 +92,16 @@ public class AndroidStudioTeleop extends LinearOpMode {
     public void moveExtension(){
 
         double extension = -gamepad2.left_stick_y;
-        double output = -0.5 * gamepad2.right_stick_y;
+        //double output = -0.25 * gamepad2.right_stick_y;
+        if(gamepad2.a){
+            pitchGoal = 70;
+        }else if(gamepad2.b){
+            pitchGoal = 200;
+        }
+
+        double currPos = rightPitchMotor.getCurrentPosition();
+        double output = pitchPid.calculate(currPos,pitchGoal);
+
         leftPitchMotor.setPower(output);
         rightPitchMotor.setPower(output);
 
@@ -115,7 +124,7 @@ public class AndroidStudioTeleop extends LinearOpMode {
         }else if(!prevRight && gamepad2.right_bumper){
             rightClose = !rightClose;
         }
-        leftClawServo.setPosition(leftClose ? 1 : 0);
+        leftClawServo.setPosition(leftClose ? 0.9 : 0);
         rightClawServo.setPosition(rightClose ? 1 : 0.6);
         prevLeft = gamepad2.left_bumper;
         prevRight = gamepad2.right_bumper;
