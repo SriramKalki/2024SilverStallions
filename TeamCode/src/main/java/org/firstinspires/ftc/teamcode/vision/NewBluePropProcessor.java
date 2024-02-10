@@ -161,7 +161,7 @@ public class NewBluePropProcessor implements VisionProcessor {
             location = Location.RIGHT;
             telemetry.addData("Position:", " Right");
         }
-
+        telemetry.update();
         maskedInputMat.copyTo(frame);
         return null;
     }

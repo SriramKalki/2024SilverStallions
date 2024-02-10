@@ -42,6 +42,8 @@ public class AndroidStudioTeleop extends LinearOpMode {
     boolean prevDpadUp = false;
     boolean prevDpadDown = false;
 
+    boolean hangControl = false;
+
     @Override
     public void runOpMode() {
         initialize();
@@ -90,6 +92,7 @@ public class AndroidStudioTeleop extends LinearOpMode {
     }
 
     public void moveExtension(){
+        if(gamepad2.left_stick_button) hangControl = true;
 
         double extension = -gamepad2.left_stick_y;
         //double output = -0.25 * gamepad2.right_stick_y;
@@ -97,10 +100,13 @@ public class AndroidStudioTeleop extends LinearOpMode {
             pitchGoal = 70;
         }else if(gamepad2.b){
             pitchGoal = 200;
+        }else if(gamepad2.y){
+            pitchGoal = 400;
         }
 
+
         double currPos = rightPitchMotor.getCurrentPosition();
-        double output = pitchPid.calculate(currPos,pitchGoal);
+        double output = hangControl ? -0.5 * gamepad2.right_stick_y : pitchPid.calculate(currPos,pitchGoal);
 
         leftPitchMotor.setPower(output);
         rightPitchMotor.setPower(output);
